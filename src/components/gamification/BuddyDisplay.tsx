@@ -22,30 +22,35 @@ export function BuddyDisplay({ buddy, size = 'lg' }: BuddyDisplayProps) {
     switch (buddy.mood) {
       case 'happy':
         return {
-          y: [0, -10, 0],
-          rotate: [0, 5, -5, 0],
-          transition: { duration: 2, repeat: Infinity },
+          y: [0, -15, 0],
+          rotate: [0, 8, -8, 0],
+          scale: [1, 1.05, 1],
+          transition: { duration: 1.5, repeat: Infinity },
         };
       case 'content':
         return {
-          y: [0, -5, 0],
+          y: [0, -8, 0],
+          rotate: [0, 2, -2, 0],
           transition: { duration: 3, repeat: Infinity },
         };
       case 'hungry':
         return {
-          x: [-3, 3, -3],
-          transition: { duration: 0.5, repeat: Infinity },
+          x: [-5, 5, -5],
+          rotate: [-2, 2, -2],
+          transition: { duration: 0.4, repeat: Infinity },
         };
       case 'sad':
         return {
-          y: [0, 5, 0],
-          opacity: [1, 0.7, 1],
-          transition: { duration: 2, repeat: Infinity },
+          y: [0, 8, 0],
+          opacity: [1, 0.6, 1],
+          rotate: [0, -5, 5, 0],
+          transition: { duration: 2.5, repeat: Infinity },
         };
       case 'neglected':
         return {
-          opacity: [0.5, 0.3, 0.5],
-          transition: { duration: 1.5, repeat: Infinity },
+          opacity: [0.4, 0.2, 0.4],
+          scale: [1, 0.95, 1],
+          transition: { duration: 2, repeat: Infinity },
         };
       default:
         return {};
@@ -66,88 +71,170 @@ export function BuddyDisplay({ buddy, size = 'lg' }: BuddyDisplayProps) {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* Robot Pet Housing */}
+      {/* Digital Pet Habitat */}
       <div className="relative">
-        {/* Metallic robot frame */}
-        <div className="p-4 bg-gradient-to-br from-slate-700 via-slate-600 to-slate-800 rounded-3xl shadow-2xl border-4 border-slate-500">
-          {/* Robot screen display */}
-          <div className="bg-gradient-to-br from-cyan-900/90 to-blue-900/90 rounded-2xl p-6 border-4 border-slate-400 relative overflow-hidden">
-            {/* Circuit board pattern overlay */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="grid grid-cols-8 grid-rows-8 h-full w-full">
-                {[...Array(64)].map((_, i) => (
-                  <div key={i} className="border border-cyan-400" />
-                ))}
-              </div>
-            </div>
-
-            {/* Robot buddy container */}
-            <motion.div
-              className={`${sizeClasses[size]} flex items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 shadow-2xl border-4 border-cyan-500 mx-auto relative`}
-              animate={getMoodAnimation()}
-              style={{ filter: getMoodFilter() }}
-            >
-              {/* Robot glow effect */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 animate-pulse" />
-              <span className="select-none text-8xl drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]">{stageInfo.emoji}</span>
-            </motion.div>
-
-            {/* LED status indicators */}
-            <div className="flex justify-center gap-1 mt-4">
-              {[...Array(5)].map((_, i) => (
+        {/* Neopet-style frame with organic curves */}
+        <div className="p-6 bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 rounded-[2.5rem] shadow-2xl border-4 border-white dark:border-purple-300">
+          {/* Pet environment */}
+          <div className="bg-gradient-to-br from-sky-100 via-purple-50 to-pink-100 dark:from-purple-900/40 dark:via-blue-900/40 dark:to-pink-900/40 rounded-[2rem] p-8 border-4 border-purple-200 dark:border-purple-700 relative overflow-hidden">
+            {/* Floating sparkles background */}
+            <div className="absolute inset-0">
+              {[...Array(12)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className={`w-2 h-2 rounded-full ${
-                    i < Math.ceil((buddy.stats.overall / 100) * 5)
-                      ? 'bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]'
-                      : 'bg-slate-600'
-                  }`}
-                  initial={{ scale: 0 }}
+                  className="absolute w-1 h-1 bg-yellow-300 rounded-full"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                  }}
                   animate={{
-                    scale: 1,
-                    opacity: i < Math.ceil((buddy.stats.overall / 100) * 5) ? [1, 0.5, 1] : 1
+                    scale: [0, 1.5, 0],
+                    opacity: [0, 1, 0],
                   }}
                   transition={{
-                    scale: { delay: i * 0.1 },
-                    opacity: { duration: 1.5, repeat: Infinity }
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: i * 0.3,
                   }}
                 />
               ))}
             </div>
+
+            {/* Creature buddy container */}
+            <motion.div
+              className={`${sizeClasses[size]} flex items-center justify-center rounded-full bg-gradient-to-br from-white/80 to-purple-100/80 dark:from-purple-800/50 dark:to-pink-800/50 shadow-2xl border-4 border-purple-300 dark:border-purple-500 mx-auto relative backdrop-blur-sm`}
+              animate={getMoodAnimation()}
+              style={{ filter: getMoodFilter() }}
+            >
+              {/* Creature glow aura */}
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400/30 to-pink-400/30"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+              />
+
+              {/* Pet emoji with enhanced size and glow */}
+              <span className="select-none text-8xl drop-shadow-[0_0_20px_rgba(168,85,247,0.4)] relative z-10">
+                {stageInfo.emoji}
+              </span>
+
+              {/* Cute floating hearts when happy */}
+              {buddy.mood === 'happy' && (
+                <>
+                  <motion.span
+                    className="absolute -top-4 -left-4 text-2xl"
+                    animate={{
+                      y: [-10, -30],
+                      opacity: [1, 0],
+                      rotate: [-10, 10],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 1,
+                    }}
+                  >
+                    💖
+                  </motion.span>
+                  <motion.span
+                    className="absolute -top-4 -right-4 text-2xl"
+                    animate={{
+                      y: [-10, -30],
+                      opacity: [1, 0],
+                      rotate: [10, -10],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 1,
+                      delay: 1,
+                    }}
+                  >
+                    ✨
+                  </motion.span>
+                </>
+              )}
+            </motion.div>
+
+            {/* Pawprint indicators */}
+            <div className="flex justify-center gap-2 mt-4">
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className={`text-xl ${
+                    i < Math.ceil((buddy.stats.overall / 100) * 5)
+                      ? 'opacity-100'
+                      : 'opacity-20'
+                  }`}
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{
+                    scale: 1,
+                    rotate: 0,
+                    filter: i < Math.ceil((buddy.stats.overall / 100) * 5)
+                      ? ['drop-shadow(0_0_5px_rgba(168,85,247,0.6))', 'drop-shadow(0_0_10px_rgba(168,85,247,0.8))', 'drop-shadow(0_0_5px_rgba(168,85,247,0.6))']
+                      : 'none'
+                  }}
+                  transition={{
+                    scale: { delay: i * 0.1, type: 'spring' },
+                    rotate: { delay: i * 0.1, type: 'spring' },
+                    filter: { duration: 1.5, repeat: Infinity }
+                  }}
+                >
+                  🐾
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Grass/ground decoration */}
+            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-green-300/30 to-transparent dark:from-green-700/30" />
           </div>
 
-          {/* Robot control panel buttons */}
-          <div className="flex justify-center gap-4 mt-3">
+          {/* Neopet-style action buttons */}
+          <div className="flex justify-center gap-3 mt-4">
             <motion.div
-              className="w-8 h-8 rounded-full bg-red-600 border-2 border-red-400 shadow-inner shadow-red-800"
-              animate={{ boxShadow: ['0_0_5px_rgba(220,38,38,0.5)', '0_0_15px_rgba(220,38,38,0.8)', '0_0_5px_rgba(220,38,38,0.5)'] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+              className="px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-pink-500 text-white font-bold text-xs shadow-lg border-2 border-pink-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              FEED
+            </motion.div>
             <motion.div
-              className="w-8 h-8 rounded-full bg-yellow-500 border-2 border-yellow-300 shadow-inner shadow-yellow-700"
-              animate={{ boxShadow: ['0_0_5px_rgba(234,179,8,0.5)', '0_0_15px_rgba(234,179,8,0.8)', '0_0_5px_rgba(234,179,8,0.5)'] }}
-              transition={{ duration: 2, repeat: Infinity, delay: 0.66 }}
-            />
+              className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 text-white font-bold text-xs shadow-lg border-2 border-blue-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              PLAY
+            </motion.div>
             <motion.div
-              className="w-8 h-8 rounded-full bg-green-500 border-2 border-green-300 shadow-inner shadow-green-700"
-              animate={{ boxShadow: ['0_0_5px_rgba(34,197,94,0.5)', '0_0_15px_rgba(34,197,94,0.8)', '0_0_5px_rgba(34,197,94,0.5)'] }}
-              transition={{ duration: 2, repeat: Infinity, delay: 1.33 }}
-            />
+              className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-400 to-purple-500 text-white font-bold text-xs shadow-lg border-2 border-purple-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              CARE
+            </motion.div>
           </div>
         </div>
 
-        {/* Power status indicator */}
+        {/* Energy status indicator */}
         <motion.div
-          className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-cyan-400 border-2 border-slate-300 shadow-lg shadow-cyan-500/50"
+          className="absolute -top-3 -right-3 px-2 py-1 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 border-2 border-white shadow-lg"
           animate={{
-            scale: [1, 1.2, 1],
-            boxShadow: ['0_0_10px_rgba(34,211,238,0.5)', '0_0_20px_rgba(34,211,238,0.8)', '0_0_10px_rgba(34,211,238,0.5)']
+            scale: [1, 1.1, 1],
+            rotate: [0, 5, -5, 0],
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
           }}
-        />
+        >
+          <span className="text-sm">⚡</span>
+        </motion.div>
       </div>
 
       <div className="text-center">
@@ -157,18 +244,27 @@ export function BuddyDisplay({ buddy, size = 'lg' }: BuddyDisplayProps) {
         </p>
       </div>
 
-      {/* Robot status display */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-full border-2 border-cyan-500 shadow-lg shadow-cyan-500/20">
-        <span className="text-xs font-bold text-cyan-400">STATUS:</span>
-        <span className="text-sm font-bold text-cyan-100">
-          {buddy.mood === 'happy' && '🟢 OPTIMAL'}
-          {buddy.mood === 'content' && '🟡 STABLE'}
-          {buddy.mood === 'hungry' && '🟠 LOW POWER'}
-          {buddy.mood === 'sad' && '🔴 MALFUNCTION'}
-          {buddy.mood === 'neglected' && '⚫ SHUTDOWN'}
-          {buddy.mood === 'sleeping' && '💤 SLEEP MODE'}
+      {/* Pet mood display */}
+      <motion.div
+        className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/80 dark:to-pink-900/80 rounded-full border-3 border-purple-300 dark:border-purple-500 shadow-lg"
+        animate={{
+          boxShadow: ['0_4px_15px_rgba(168,85,247,0.3)', '0_4px_25px_rgba(236,72,153,0.4)', '0_4px_15px_rgba(168,85,247,0.3)']
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+        }}
+      >
+        <span className="text-xs font-bold text-purple-600 dark:text-purple-300">MOOD:</span>
+        <span className="text-sm font-bold text-purple-900 dark:text-pink-200">
+          {buddy.mood === 'happy' && '💖 PLAYFUL'}
+          {buddy.mood === 'content' && '😊 HAPPY'}
+          {buddy.mood === 'hungry' && '🍖 HUNGRY'}
+          {buddy.mood === 'sad' && '😢 LONELY'}
+          {buddy.mood === 'neglected' && '💔 NEGLECTED'}
+          {buddy.mood === 'sleeping' && '😴 SLEEPY'}
         </span>
-      </div>
+      </motion.div>
     </div>
   );
 }
