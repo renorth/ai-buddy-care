@@ -66,52 +66,82 @@ export function BuddyDisplay({ buddy, size = 'lg' }: BuddyDisplayProps) {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* Tamagotchi-style screen */}
+      {/* Robot Pet Housing */}
       <div className="relative">
-        {/* Screen border */}
-        <div className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl border-4 border-gray-700">
-          {/* Inner screen */}
-          <div className="bg-gradient-to-br from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/20 rounded-2xl p-6 border-4 border-gray-600">
-            {/* Buddy container */}
+        {/* Metallic robot frame */}
+        <div className="p-4 bg-gradient-to-br from-slate-700 via-slate-600 to-slate-800 rounded-3xl shadow-2xl border-4 border-slate-500">
+          {/* Robot screen display */}
+          <div className="bg-gradient-to-br from-cyan-900/90 to-blue-900/90 rounded-2xl p-6 border-4 border-slate-400 relative overflow-hidden">
+            {/* Circuit board pattern overlay */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="grid grid-cols-8 grid-rows-8 h-full w-full">
+                {[...Array(64)].map((_, i) => (
+                  <div key={i} className="border border-cyan-400" />
+                ))}
+              </div>
+            </div>
+
+            {/* Robot buddy container */}
             <motion.div
-              className={`${sizeClasses[size]} flex items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 shadow-lg border-4 border-white dark:border-gray-700 mx-auto`}
+              className={`${sizeClasses[size]} flex items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 shadow-2xl border-4 border-cyan-500 mx-auto relative`}
               animate={getMoodAnimation()}
               style={{ filter: getMoodFilter() }}
             >
-              <span className="select-none">{stageInfo.emoji}</span>
+              {/* Robot glow effect */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 animate-pulse" />
+              <span className="select-none text-8xl drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]">{stageInfo.emoji}</span>
             </motion.div>
 
-            {/* Pixel-style decorations */}
+            {/* LED status indicators */}
             <div className="flex justify-center gap-1 mt-4">
               {[...Array(5)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className={`w-2 h-2 rounded-sm ${
+                  className={`w-2 h-2 rounded-full ${
                     i < Math.ceil((buddy.stats.overall / 100) * 5)
-                      ? 'bg-green-500'
-                      : 'bg-gray-300 dark:bg-gray-600'
+                      ? 'bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]'
+                      : 'bg-slate-600'
                   }`}
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: i * 0.1 }}
+                  animate={{
+                    scale: 1,
+                    opacity: i < Math.ceil((buddy.stats.overall / 100) * 5) ? [1, 0.5, 1] : 1
+                  }}
+                  transition={{
+                    scale: { delay: i * 0.1 },
+                    opacity: { duration: 1.5, repeat: Infinity }
+                  }}
                 />
               ))}
             </div>
           </div>
 
-          {/* Tamagotchi buttons */}
+          {/* Robot control panel buttons */}
           <div className="flex justify-center gap-4 mt-3">
-            <div className="w-8 h-8 rounded-full bg-gray-600 border-2 border-gray-500 shadow-inner" />
-            <div className="w-8 h-8 rounded-full bg-gray-600 border-2 border-gray-500 shadow-inner" />
-            <div className="w-8 h-8 rounded-full bg-gray-600 border-2 border-gray-500 shadow-inner" />
+            <motion.div
+              className="w-8 h-8 rounded-full bg-red-600 border-2 border-red-400 shadow-inner shadow-red-800"
+              animate={{ boxShadow: ['0_0_5px_rgba(220,38,38,0.5)', '0_0_15px_rgba(220,38,38,0.8)', '0_0_5px_rgba(220,38,38,0.5)'] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            <motion.div
+              className="w-8 h-8 rounded-full bg-yellow-500 border-2 border-yellow-300 shadow-inner shadow-yellow-700"
+              animate={{ boxShadow: ['0_0_5px_rgba(234,179,8,0.5)', '0_0_15px_rgba(234,179,8,0.8)', '0_0_5px_rgba(234,179,8,0.5)'] }}
+              transition={{ duration: 2, repeat: Infinity, delay: 0.66 }}
+            />
+            <motion.div
+              className="w-8 h-8 rounded-full bg-green-500 border-2 border-green-300 shadow-inner shadow-green-700"
+              animate={{ boxShadow: ['0_0_5px_rgba(34,197,94,0.5)', '0_0_15px_rgba(34,197,94,0.8)', '0_0_5px_rgba(34,197,94,0.5)'] }}
+              transition={{ duration: 2, repeat: Infinity, delay: 1.33 }}
+            />
           </div>
         </div>
 
-        {/* Status indicator */}
+        {/* Power status indicator */}
         <motion.div
-          className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-green-500 border-2 border-white dark:border-gray-700 shadow-lg"
+          className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-cyan-400 border-2 border-slate-300 shadow-lg shadow-cyan-500/50"
           animate={{
             scale: [1, 1.2, 1],
+            boxShadow: ['0_0_10px_rgba(34,211,238,0.5)', '0_0_20px_rgba(34,211,238,0.8)', '0_0_10px_rgba(34,211,238,0.5)']
           }}
           transition={{
             duration: 2,
@@ -127,16 +157,16 @@ export function BuddyDisplay({ buddy, size = 'lg' }: BuddyDisplayProps) {
         </p>
       </div>
 
-      {/* Mood indicator with pixel style */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-full border-2 border-gray-300 dark:border-gray-700">
-        <span className="text-xs font-bold text-gray-500 dark:text-gray-400">MOOD:</span>
-        <span className="text-sm font-bold">
-          {buddy.mood === 'happy' && '😊 HAPPY'}
-          {buddy.mood === 'content' && '😌 CONTENT'}
-          {buddy.mood === 'hungry' && '😋 HUNGRY'}
-          {buddy.mood === 'sad' && '😢 SAD'}
-          {buddy.mood === 'neglected' && '😞 NEGLECTED'}
-          {buddy.mood === 'sleeping' && '😴 SLEEPING'}
+      {/* Robot status display */}
+      <div className="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-full border-2 border-cyan-500 shadow-lg shadow-cyan-500/20">
+        <span className="text-xs font-bold text-cyan-400">STATUS:</span>
+        <span className="text-sm font-bold text-cyan-100">
+          {buddy.mood === 'happy' && '🟢 OPTIMAL'}
+          {buddy.mood === 'content' && '🟡 STABLE'}
+          {buddy.mood === 'hungry' && '🟠 LOW POWER'}
+          {buddy.mood === 'sad' && '🔴 MALFUNCTION'}
+          {buddy.mood === 'neglected' && '⚫ SHUTDOWN'}
+          {buddy.mood === 'sleeping' && '💤 SLEEP MODE'}
         </span>
       </div>
     </div>

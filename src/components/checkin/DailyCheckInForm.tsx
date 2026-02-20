@@ -13,14 +13,22 @@ export function DailyCheckInForm() {
   const { buddy } = useStore();
   const { submitCheckIn } = useCheckIn();
 
-  const [selectedTool, setSelectedTool] = useState<AITool>('claude');
+  const [selectedTools, setSelectedTools] = useState<AITool[]>([]);
   const [selectedUsageTypes, setSelectedUsageTypes] = useState<UsageType[]>([]);
-  const [selectedImpact, setSelectedImpact] = useState<ImpactLevel>('medium');
+  const [selectedImpacts, setSelectedImpacts] = useState<ImpactLevel[]>([]);
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const alreadyCheckedIn = buddy ? hasCheckedInToday(buddy.lastFedDate) : false;
+
+  const toggleTool = (tool: AITool) => {
+    setSelectedTools(prev =>
+      prev.includes(tool)
+        ? prev.filter(t => t !== tool)
+        : [...prev, tool]
+    );
+  };
 
   const toggleUsageType = (type: UsageType) => {
     setSelectedUsageTypes(prev =>
@@ -30,26 +38,39 @@ export function DailyCheckInForm() {
     );
   };
 
+  const toggleImpact = (impact: ImpactLevel) => {
+    setSelectedImpacts(prev =>
+      prev.includes(impact)
+        ? prev.filter(i => i !== impact)
+        : [...prev, impact]
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (selectedUsageTypes.length === 0 || alreadyCheckedIn) return;
+    if (selectedTools.length === 0 || selectedUsageTypes.length === 0 || selectedImpacts.length === 0 || alreadyCheckedIn) return;
 
     setIsSubmitting(true);
 
-    const toolUsage: ToolUsage = {
-      tool: selectedTool,
-      usageTypes: selectedUsageTypes,
-      impact: selectedImpact,
-    };
+    // Create tool usages for each combination
+    const toolUsages: ToolUsage[] = selectedTools.flatMap(tool =>
+      selectedImpacts.map(impact => ({
+        tool,
+        usageTypes: selectedUsageTypes,
+        impact,
+      }))
+    );
 
     try {
-      await submitCheckIn([toolUsage], notes || undefined);
+      await submitCheckIn(toolUsages, notes || undefined);
       setShowSuccess(true);
 
       // Reset form
       setTimeout(() => {
+        setSelectedTools([]);
         setSelectedUsageTypes([]);
+        setSelectedImpacts([]);
         setNotes('');
         setShowSuccess(false);
       }, 2000);
@@ -103,15 +124,15 @@ export function DailyCheckInForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* AI Tool Selection */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Which AI tool did you use?</label>
+        <label className="block text-sm font-medium">Which AI tools did you use? (select all that apply)</label>
         <div className="grid grid-cols-2 gap-2">
           {(Object.keys(TOOL_NAMES) as AITool[]).map(tool => (
             <button
               key={tool}
               type="button"
-              onClick={() => setSelectedTool(tool)}
+              onClick={() => toggleTool(tool)}
               className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                selectedTool === tool
+                selectedTools.includes(tool)
                   ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-900 dark:text-purple-100'
                   : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
@@ -145,15 +166,15 @@ export function DailyCheckInForm() {
 
       {/* Impact Level Selection */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">What was the impact?</label>
+        <label className="block text-sm font-medium">What was the impact? (select all that apply)</label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {(Object.keys(IMPACT_NAMES) as ImpactLevel[]).map(impact => (
             <button
               key={impact}
               type="button"
-              onClick={() => setSelectedImpact(impact)}
+              onClick={() => toggleImpact(impact)}
               className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                selectedImpact === impact
+                selectedImpacts.includes(impact)
                   ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-900 dark:text-green-100'
                   : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
@@ -182,11 +203,11 @@ export function DailyCheckInForm() {
       {/* Submit Button */}
       <motion.button
         type="submit"
-        disabled={selectedUsageTypes.length === 0 || isSubmitting}
-        whileHover={{ scale: selectedUsageTypes.length > 0 && !isSubmitting ? 1.02 : 1 }}
-        whileTap={{ scale: selectedUsageTypes.length > 0 && !isSubmitting ? 0.98 : 1 }}
+        disabled={selectedTools.length === 0 || selectedUsageTypes.length === 0 || selectedImpacts.length === 0 || isSubmitting}
+        whileHover={{ scale: selectedTools.length > 0 && selectedUsageTypes.length > 0 && selectedImpacts.length > 0 && !isSubmitting ? 1.02 : 1 }}
+        whileTap={{ scale: selectedTools.length > 0 && selectedUsageTypes.length > 0 && selectedImpacts.length > 0 && !isSubmitting ? 0.98 : 1 }}
         className={`w-full py-4 rounded-lg font-semibold text-white transition-all ${
-          selectedUsageTypes.length === 0 || isSubmitting
+          selectedTools.length === 0 || selectedUsageTypes.length === 0 || selectedImpacts.length === 0 || isSubmitting
             ? 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed'
             : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
         }`}
@@ -194,10 +215,10 @@ export function DailyCheckInForm() {
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
             <Loader2 className="w-5 h-5 animate-spin" />
-            Caring for Buddy...
+            Caring for Robot Buddy...
           </span>
         ) : (
-          'Care for Buddy 💝'
+          'Care for Robot Buddy 🤖'
         )}
       </motion.button>
     </form>

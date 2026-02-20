@@ -63,13 +63,13 @@ export const DAILY_DECAY = {
   energy: 20,
 };
 
-// Buddy Stages
+// Buddy Stages (Robot Pet Evolution)
 export const BUDDY_STAGES = {
-  spark: { name: 'Spark', minLevel: 1, emoji: '✨', description: 'A newborn AI buddy' },
-  scout: { name: 'Scout', minLevel: 3, emoji: '🤖', description: 'An curious young bot' },
-  sage: { name: 'Sage', minLevel: 6, emoji: '🧠', description: 'A wise growing bot' },
-  genius: { name: 'Genius', minLevel: 9, emoji: '💡', description: 'A brilliant adult bot' },
-  oracle: { name: 'Oracle', minLevel: 12, emoji: '🌟', description: 'A legendary AI master' },
+  spark: { name: 'Byte', minLevel: 1, emoji: '🔩', description: 'A tiny robot sprout' },
+  scout: { name: 'Chip', minLevel: 3, emoji: '🤖', description: 'A curious young bot' },
+  sage: { name: 'Cyborg', minLevel: 6, emoji: '🦾', description: 'A wise mechanized bot' },
+  genius: { name: 'Android', minLevel: 9, emoji: '🦿', description: 'An advanced AI robot' },
+  oracle: { name: 'Mecha', minLevel: 12, emoji: '🚀', description: 'A legendary robot master' },
 };
 
 // Experience needed per level (cumulative)
