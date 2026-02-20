@@ -194,31 +194,6 @@ export function BuddyDisplay({ buddy, size = 'lg' }: BuddyDisplayProps) {
             {/* Grass/ground decoration */}
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-green-300/30 to-transparent dark:from-green-700/30" />
           </div>
-
-          {/* Neopet-style action buttons */}
-          <div className="flex justify-center gap-3 mt-4">
-            <motion.div
-              className="px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-pink-500 text-white font-bold text-xs shadow-lg border-2 border-pink-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              FEED
-            </motion.div>
-            <motion.div
-              className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 text-white font-bold text-xs shadow-lg border-2 border-blue-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              PLAY
-            </motion.div>
-            <motion.div
-              className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-400 to-purple-500 text-white font-bold text-xs shadow-lg border-2 border-purple-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              CARE
-            </motion.div>
-          </div>
         </div>
 
         {/* Energy status indicator */}
