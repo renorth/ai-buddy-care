@@ -1,8 +1,46 @@
-import { differenceInDays, parseISO, format } from 'date-fns';
+import { differenceInDays, parseISO, format, getDay, addDays } from 'date-fns';
 import { STREAK_BONUSES } from '@/config/gamification';
 
 /**
- * Calculate streak based on last check-in date
+ * Check if a date is a weekday (Monday-Friday)
+ */
+function isWeekday(date: Date): boolean {
+  const day = getDay(date);
+  return day >= 1 && day <= 5; // Monday = 1, Friday = 5
+}
+
+/**
+ * Calculate number of workdays between two dates (excluding start, including end)
+ * Weekends don't count as missed days for work-focused tool
+ */
+function countWorkdaysBetween(startDate: Date, endDate: Date): number {
+  let count = 0;
+  let current = addDays(startDate, 1);
+
+  while (current <= endDate) {
+    if (isWeekday(current)) {
+      count++;
+    }
+    current = addDays(current, 1);
+  }
+
+  return count;
+}
+
+/**
+ * Get the next workday from a given date
+ */
+function getNextWorkday(date: Date): Date {
+  let next = addDays(date, 1);
+  while (!isWeekday(next)) {
+    next = addDays(next, 1);
+  }
+  return next;
+}
+
+/**
+ * Calculate streak based on last check-in date (workdays only)
+ * Weekends are ignored - they don't break streaks or count as neglect
  */
 export function calculateStreak(
   lastCheckInDate: string | null,
@@ -33,8 +71,25 @@ export function calculateStreak(
     };
   }
 
-  // Consecutive day
-  if (daysDiff === 1) {
+  // Calculate workdays between last check-in and today
+  const workdaysBetween = countWorkdaysBetween(lastDate, today);
+
+  // If today is a weekend, check against the previous Friday
+  if (!isWeekday(today)) {
+    // Weekend check-in is optional and keeps streak alive
+    return {
+      newStreak: currentStreak,
+      streakBroken: false,
+      daysNeglected: 0,
+    };
+  }
+
+  // Today is a workday - check if we checked in on the last workday
+  const expectedLastWorkday = getNextWorkday(lastDate);
+  const workdaysSkipped = countWorkdaysBetween(lastDate, today) - 1;
+
+  // If we checked in on the last workday (or it's the next workday)
+  if (workdaysSkipped === 0) {
     return {
       newStreak: currentStreak + 1,
       streakBroken: false,
@@ -42,11 +97,11 @@ export function calculateStreak(
     };
   }
 
-  // Streak broken
+  // Streak broken - missed one or more workdays
   return {
     newStreak: 1,
     streakBroken: true,
-    daysNeglected: daysDiff - 1,
+    daysNeglected: workdaysSkipped,
   };
 }
 

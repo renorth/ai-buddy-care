@@ -48,7 +48,7 @@ export const MULTI_TOOL_BONUSES: Record<number, { happiness: number; energy: num
   4: { happiness: 15, energy: 30, xp: 100 },
 };
 
-// Weekend bonus
+// Weekend bonus (optional - weekends don't count toward streaks or cause decay)
 export const WEEKEND_BONUS = {
   happiness: 10,
   health: 10,
@@ -56,7 +56,7 @@ export const WEEKEND_BONUS = {
   xp: 50,
 };
 
-// Stat decay per missed day
+// Stat decay per missed workday (weekends don't cause decay)
 export const DAILY_DECAY = {
   happiness: 15,
   health: 10,

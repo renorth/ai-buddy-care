@@ -118,7 +118,8 @@ export function applyCareBenefits(
 }
 
 /**
- * Calculate stat decay for missed days
+ * Calculate stat decay for missed workdays only
+ * Weekends don't cause decay since this is a work-focused tool
  */
 export function calculateStatDecay(
   currentStats: { happiness: number; health: number; energy: number },
@@ -126,15 +127,16 @@ export function calculateStatDecay(
 ): { happiness: number; health: number; energy: number } {
   if (daysNeglected === 0) return currentStats;
 
-  const DECAY_PER_DAY = {
+  // Only workdays cause decay - weekends are free!
+  const DECAY_PER_WORKDAY = {
     happiness: 15,
     health: 10,
     energy: 20,
   };
 
   return {
-    happiness: Math.max(0, currentStats.happiness - (DECAY_PER_DAY.happiness * daysNeglected)),
-    health: Math.max(0, currentStats.health - (DECAY_PER_DAY.health * daysNeglected)),
-    energy: Math.max(0, currentStats.energy - (DECAY_PER_DAY.energy * daysNeglected)),
+    happiness: Math.max(0, currentStats.happiness - (DECAY_PER_WORKDAY.happiness * daysNeglected)),
+    health: Math.max(0, currentStats.health - (DECAY_PER_WORKDAY.health * daysNeglected)),
+    energy: Math.max(0, currentStats.energy - (DECAY_PER_WORKDAY.energy * daysNeglected)),
   };
 }
